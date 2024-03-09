@@ -1,0 +1,7 @@
+services:
+  web:
+    image: custom-http
+    ports:
+      - "443:443"
+    volumes:
+      - ./docs:/usr/local/apache2/htdocs/
