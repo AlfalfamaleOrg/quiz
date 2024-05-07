@@ -1,7 +1,49 @@
-<html>
+<!DOCTYPE html>
+<html >
+<!DOCTYPE html>
     <head>
+        <!DOCTYPE html>
+
+
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0">
+
+        <script src="qrcode.min.js"></script>
+        <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
         <script type="module" src="join.js"></script>
+        <style>
+            .full-width-div {
+                background-color: orange;
+                padding: 5px;
+                text-align: center;
+                left: 0;
+                right: 0;
+            }
+            html, body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                width: 100%;
+            }
+
+            .screenFourth{
+                background-size: cover;
+                background-position: top;
+                width: 100%;
+            }
+
+            @media screen{
+                .container{ width: 100vw; margin: 0; padding: 0; }
+            }
+        </style>
     </head>
     <body>
+        <div class="screenFourth">
+            <div class="container">
+                <h1>Client</h1>
+                <div id="qrcode"></div>
+                <div style="height: 50vh" class="full-width-div" id="button"></div>
+            </div>
+        </div>
     </body>
 </html>

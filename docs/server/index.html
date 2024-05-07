@@ -1,9 +1,14 @@
 <html>
-    <head>
-        <script src="qrcode.min.js"></script>
-        <script type="module" src="server.js"></script>
-    </head>
+<head>
+    <script src="qrcode.min.js"></script>
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script type="module" src="server.js"></script>
+</head>
     <body>
+    <h1>Server</h1>
+        <audio id="audio" preload="auto" src="../music/01.mp4#t=0"></audio>
         <div id="qrcode"></div>
+        <div id="reader"></div>
     </body>
 </html>

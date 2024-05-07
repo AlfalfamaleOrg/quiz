@@ -1,29 +1,45 @@
-let localConnection = null; // RTCPeerConnection for our "local" connection
+import debug from '../debug.js';
+let myId;
+if (debug) {
+    myId = 'host';
+}
 
-let sendChannel = null; // RTCDataChannel for the local (sender)
+const peer = new peerjs.Peer(myId);
+let server;
+let QRCodeElement = document.getElementById("qrcode");
+const messageFromServer = (data) => {
+    console.log('server:', data);
+    const {message, type} = JSON.parse(data);
+    switch(type) {
+        case 'ping':
+            server.send(JSON.stringify({type: 'pong', message: 'host'}));
+            break;
+        default:
+            console.log('Unknown message type:', type);
+    }
+}
 
+peer.on('open', (id) => {
+    new QRCode(document.getElementById("qrcode"), id);
+    console.log(`onScanSuccess('${id}')`);
+    let serverId = location.hash.slice(1);
+    peer.connect(serverId);
+    peer.on('connection', serverConnection => {
+        QRCodeElement.innerHTML = '';
+        server = serverConnection;
+        const html5QrcodeScanner = new Html5QrcodeScanner(
+            "reader",
+            {fps: 10, qrbox: {width: 250, height: 250}},
+            false
+        );
 
-const hostConnection = new RTCPeerConnection();
+        window.onScanSuccess = (message) => {
+            server.send(JSON.stringify({type: 'client', message}));
+        }
 
-sendChannel = hostConnection.createDataChannel("sendChannel");
-console.log(sendChannel);
-sendChannel.onopen = () => {
-    console.log('onOpen', arguments);
-};
-sendChannel.onclose = () => {
-    console.log('onClose', arguments);
-};
+        html5QrcodeScanner.render(onScanSuccess);
 
+        server.on('data', messageFromServer);
+    });
 
-
-const offer = await hostConnection.createOffer();
-console.log(offer);
-await hostConnection.setLocalDescription(offer);
-const description = hostConnection.localDescription;
-console.log(description.toJSON());
-
-
-
-
-
-new QRCode(document.getElementById("qrcode"), window.location.origin + '/join#default');
+});
