@@ -17,9 +17,15 @@
             text-align: center;
             text-decoration: none;
             display: inline-block;
-            font-size: 16px;
+            font-size: 32px;
             margin: 4px 2px;
             cursor: pointer;
+        }
+        .playing {
+            background-color: orange;
+        }
+        .played {
+            background-color: #f44336;
         }
     </style>
 <body>
@@ -253,6 +259,12 @@
             const title = this.getAttribute('data-title');
             document.getElementById('title').innerText = title.substring(0,2);
             document.getElementById('title').setAttribute('full', title);
+            for (let button  of document.getElementsByClassName('playing')) {
+                button.classList.remove('playing');
+                button.classList.add('played');
+            }
+
+            this.classList.add('playing');
             return;
         }
 
