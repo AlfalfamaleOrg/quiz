@@ -203,7 +203,7 @@
 <button class="playbutton" data-title="74	Que Si, Que No	Jody Bernal" id="zzoBV37EaFY" data-sec="0">74</button>
 <!--75	Never Gonna Give You Up	Rick Astley-->
 <button class="playbutton" data-title="75	Never Gonna Give You Up	Rick Astley" id="dQw4w9WgXcQ" data-sec="0">75</button>
-
+<button onclick="reset = true; localStorage.clear(); window.location.reload()">RESET</button>
 <script>
     // 2. This code loads the IFrame Player API code asynchronously.
     var tag = document.createElement('script');
@@ -220,7 +220,7 @@
         waiting = new YT.Player('waiting', {
             height: '0',
             width: '0',
-            volume: 50,
+            volume: 20,
             videoId: '3to4vaWl2dY',
             playlistId: '3to4vaWl2dY',
             playerVars: {
@@ -241,7 +241,7 @@
             waiting.pauseVideo();
         } else {
             player.stopVideo();
-            waiting.setVolume(50);
+            waiting.setVolume(20);
             waiting.playVideo();
         }
     }
@@ -253,7 +253,7 @@
         var videoId = this.id;
         var sec = this.getAttribute('data-sec');
 
-        if (player.getVideoData().video_id != videoId) {
+        if (player.getVideoData().video_id !== videoId) {
             player.loadVideoById(videoId, sec);
             waiting.pauseVideo();
             player.playVideo();
@@ -266,6 +266,7 @@
             }
 
             this.classList.add('playing');
+            this.classList.remove('played');
             return;
         }
 
@@ -282,8 +283,29 @@
         player.stopVideo();
         waiting.pauseVideo();
     }
-    function title() {
-        document.getElementById('title').innerText = document.getElementById('title').getAttribute('full');
+    let reset = false;
+    onbeforeunload = function() {
+
+        if (reset === true) {
+            return;
+        }
+        let played = [];
+        for (let button  of document.getElementsByClassName('playbutton')) {
+            if (button.classList.contains('playing')) {
+                localStorage.setItem('playing', button.id);
+                continue;
+            }
+            if (button.classList.contains('played')) {
+                played.push(button.id);
+            }
+        }
+
+        localStorage.setItem('played', played.join(','));
+    };
+    document.getElementById(localStorage.getItem('playing')).classList.add('playing');
+    const played = localStorage.getItem('played').split(',');
+    for (let id of played) {
+        document.getElementById(id).classList.add('played');
     }
 </script>
 </body>
